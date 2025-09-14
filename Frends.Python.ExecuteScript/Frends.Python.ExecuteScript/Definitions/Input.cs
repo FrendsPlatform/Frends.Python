@@ -51,8 +51,8 @@ public class Input
 
     /// <summary>
     /// Arguments provided to the script.
-    /// <example>['MyName']</example>
     /// </summary>
-    [DefaultValue("[]")]
+    /// <example>['MyName']</example>
+    [DefaultValue("")]
     public string[] Arguments { get; set; } = [];
 }

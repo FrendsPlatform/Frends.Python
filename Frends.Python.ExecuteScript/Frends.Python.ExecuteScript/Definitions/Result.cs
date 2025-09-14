@@ -26,10 +26,12 @@ public class Result
     /// <summary>
     /// Output written to standard output (stdout) by the process.
     /// </summary>
+    /// <example>Hello, World!</example>
     public string StandardOutput { get; set; }
 
     /// <summary>
     /// Error output written to standard error (stderr) by the process.
     /// </summary>
+    /// <example>File not found</example>
     public string StandardError { get; set; }
 }
