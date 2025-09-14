@@ -22,7 +22,7 @@ public class UnitTests
     {
         IsPreparationNeeded = true,
         PreparationScriptPath = Path.Combine(TestDataDir, $"prepScript{PrepScriptExtension}"),
-        ExecutionMode = ExecutionMode.Script,
+        ExecutionMode = ExecutionMode.File,
         ScriptPath = Path.Combine(TestDataDir, "script.py"),
         Code = null,
         Arguments = [],

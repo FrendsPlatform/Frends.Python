@@ -17,13 +17,13 @@ namespace Frends.Python.ExecuteScript;
 public static class Python
 {
     /// <summary>
-    /// Pythones the input string the specified number of times.
+    /// Task to execute Python scripts.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends-Python-ExecuteScript)
     /// </summary>
-    /// <param name="input">Essential parameters.</param>
-    /// <param name="options">Additional parameters.</param>
+    /// <param name="input">Information about an executed script</param>
+    /// <param name="options">Exception settings.</param>
     /// <param name="cancellationToken">A cancellation token provided by Frends Platform.</param>
-    /// <returns>object { bool Success, string Output, object Error { string Message, dynamic AdditionalInfo } }</returns>
+    /// <returns>object { bool Success, int ExitCode, object Error { string Message, Exception AdditionalInfo }, string StandardOutput, string StandardError }</returns>
     public static async Task<Result> ExecuteScript(
         [PropertyTab] Input input,
         [PropertyTab] Options options,
@@ -73,28 +73,27 @@ public static class Python
         }
         catch (Exception e) when (e is not OperationCanceledException)
         {
-            return ErrorHandler.Handle(e, options.ThrowErrorOnFailure, options.ErrorMessageOnFailure, exitCode,
-                stdError, stdOutput);
+            return ErrorHandler.Handle(
+                e,
+                options.ThrowErrorOnFailure,
+                options.ErrorMessageOnFailure,
+                exitCode,
+                stdError,
+                stdOutput);
         }
     }
 
     private static string GenerateCommand(bool isWindows, Input input)
     {
-        string pythonCommand;
         var args = input.Arguments != Array.Empty<string>() ? string.Join(" ", input.Arguments) : string.Empty;
-        switch (input.ExecutionMode)
+        var pythonCommand = input.ExecutionMode switch
         {
-            case ExecutionMode.Script:
-                pythonCommand = $"python {input.ScriptPath} {args}";
-                break;
-            case ExecutionMode.Inline:
-                pythonCommand = isWindows
-                    ? $"python -c \"{input.Code}\" {args}"
-                    : $"python -c \\\"{input.Code}\\\" {args}";
-                break;
-            default:
-                throw new Exception("Execution mode must be defined");
-        }
+            ExecutionMode.File => $"python {input.ScriptPath} {args}",
+            ExecutionMode.Inline => isWindows
+                ? $"python -c \"{input.Code}\" {args}"
+                : $"python -c \\\"{input.Code}\\\" {args}",
+            _ => throw new Exception("Execution mode must be defined")
+        };
 
         string fullCommand;
         if (input.IsPreparationNeeded)

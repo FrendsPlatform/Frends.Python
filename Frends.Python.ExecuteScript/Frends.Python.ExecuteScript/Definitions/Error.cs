@@ -1,3 +1,5 @@
+using System;
+
 namespace Frends.Python.ExecuteScript.Definitions;
 
 /// <summary>
@@ -14,7 +16,6 @@ public class Error
     /// <summary>
     /// Additional information about the error.
     /// </summary>
-    /// <example>object { Exception Exception }</example>
-    // TODO: Add task specific additional information. Strong typing is recommended when reasonable.
-    public dynamic AdditionalInfo { get; set; }
+    /// <example>object { Exception AdditionalInfo }</example>
+    public Exception AdditionalInfo { get; set; }
 }

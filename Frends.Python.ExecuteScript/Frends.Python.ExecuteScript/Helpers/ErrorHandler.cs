@@ -3,6 +3,9 @@ using Frends.Python.ExecuteScript.Definitions;
 
 namespace Frends.Python.ExecuteScript.Helpers;
 
+/// <summary>
+/// Method handling errors in the task
+/// </summary>
 public static class ErrorHandler
 {
     /// <summary>
@@ -10,10 +13,18 @@ public static class ErrorHandler
     /// </summary>
     /// <param name="exception">Caught exception</param>
     /// <param name="throwOnFailure">Frends flag</param>
-    /// <param name="errorMessage">Message to throw in error event</param>
+    /// <param name="errorMessageOnFailure">Message to throw in error event</param>
+    /// <param name="exitCode">exit code returned by process</param>
+    /// <param name="stdError">error returned from a process</param>
+    /// <param name="stdOutput">output returned from a process</param>
     /// <returns>Throw exception if a flag is true, else return Result with Error info</returns>
-    public static Result Handle(Exception exception, bool throwOnFailure, string errorMessageOnFailure, int exitCode,
-        string stdError, string stdOutput)
+    public static Result Handle(
+        Exception exception,
+        bool throwOnFailure,
+        string errorMessageOnFailure,
+        int exitCode,
+        string stdError,
+        string stdOutput)
     {
         if (throwOnFailure)
         {
@@ -34,13 +45,10 @@ public static class ErrorHandler
             Error = new Error
             {
                 Message = errorMessage,
-                AdditionalInfo = new
-                {
-                    Exception = exception,
-                },
+                AdditionalInfo = exception,
             },
             StandardError = stdError,
-            StandardOutput = stdOutput
+            StandardOutput = stdOutput,
         };
     }
 }

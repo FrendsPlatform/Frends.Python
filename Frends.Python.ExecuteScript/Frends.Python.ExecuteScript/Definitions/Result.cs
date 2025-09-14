@@ -12,17 +12,24 @@ public class Result
     public bool Success { get; set; }
 
     /// <summary>
-    /// Input string repeated the specified number of times.
+    /// ExitCode returned by the process. 0 indicates success.
     /// </summary>
-    /// <example>foobar,foobar</example>
+    /// <example>0</example>
     public int ExitCode { get; set; }
 
     /// <summary>
     /// Error that occurred during task execution.
     /// </summary>
-    /// <example>object { string Message, object { Exception Exception } AdditionalInfo }</example>
+    /// <example>object { string Message, Exception AdditionalInfo }</example>
     public Error Error { get; set; }
-    
+
+    /// <summary>
+    /// Output written to standard output (stdout) by the process.
+    /// </summary>
     public string StandardOutput { get; set; }
+
+    /// <summary>
+    /// Error output written to standard error (stderr) by the process.
+    /// </summary>
     public string StandardError { get; set; }
 }

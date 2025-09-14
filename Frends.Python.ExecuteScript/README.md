@@ -1,6 +1,6 @@
 # Frends.Python.ExecuteScript
 
-Description of what the Task will do.
+Task to execute Python scripts.
 
 [![ExecuteScript_build](https://github.com/FrendsPlatform/Frends.Python/actions/workflows/ExecuteScript_build_and_test_on_main.yml/badge.svg)](https://github.com/FrendsPlatform/Frends.Python/actions/workflows/ExecuteScript_build_and_test_on_main.yml)
 ![Coverage](https://app-github-custom-badges.azurewebsites.net/Badge?key=FrendsPlatform/Frends.Python/Frends.Python.ExecuteScript|main)
