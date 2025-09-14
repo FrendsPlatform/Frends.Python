@@ -28,15 +28,6 @@
         <None Update="TestData\**\*.*">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="TestData\prepScript.sh">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="TestData\scriptWithArgs.py">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="TestData\scriptWithImport.py">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
     </ItemGroup>
 
 </Project>

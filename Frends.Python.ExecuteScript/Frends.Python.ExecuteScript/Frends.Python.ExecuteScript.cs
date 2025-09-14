@@ -88,7 +88,9 @@ public static class Python
                 pythonCommand = $"python {input.ScriptPath} {args}";
                 break;
             case ExecutionMode.Inline:
-                pythonCommand = $"python -c \"{input.Code}\" {args}";
+                pythonCommand = isWindows
+                    ? $"python -c \"{input.Code}\" {args}"
+                    : $"python -c \\\"{input.Code}\\\" {args}";
                 break;
             default:
                 throw new Exception("Execution mode must be defined");
@@ -99,11 +101,11 @@ public static class Python
         {
             fullCommand = isWindows
                 ? $"powershell -File {input.PreparationScriptPath} && {pythonCommand}"
-                : $"source '{input.PreparationScriptPath}' && {pythonCommand}";
+                : $"\"source '{input.PreparationScriptPath}' && {pythonCommand}\"";
         }
         else
         {
-            fullCommand = pythonCommand;
+            fullCommand = isWindows ? pythonCommand : $"\"{pythonCommand}\"";
         }
 
         return fullCommand;

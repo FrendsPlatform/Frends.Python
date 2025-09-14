@@ -1,4 +1,5 @@
-﻿echo "Preparing environment..."
-alias python=python3
-source ~/.bashrc
+﻿
+echo "Preparing environment..."
+python3 -m venv ./myenv
+source ./myenv/bin/activate
 pip install numpy
