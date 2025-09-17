@@ -11,24 +11,11 @@ namespace Frends.Python.ExecuteScript.Tests;
 [TestFixture]
 public class UnitTests
 {
+    private const string CustomErrorMessage = "error message";
     private static readonly string TestDataDir = Path.Combine(AppContext.BaseDirectory, "TestData");
 
     private static readonly string PrepScriptExtension =
         RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".ps1" : ".sh";
-
-    private static readonly string CustomErrorMessage = "error message";
-
-    private static Input DefaultInput() => new()
-    {
-        IsPreparationNeeded = true,
-        PreparationScriptPath = Path.Combine(TestDataDir, $"prepScript{PrepScriptExtension}"),
-        ExecutionMode = ExecutionMode.File,
-        ScriptPath = Path.Combine(TestDataDir, "script.py"),
-        Code = null,
-        Arguments = [],
-    };
-
-    private static Options DefaultOptions() => new() { ThrowErrorOnFailure = true, ErrorMessageOnFailure = null };
 
     [Test]
     public void CustomErrorMessageIsUsed()
@@ -153,4 +140,16 @@ public class UnitTests
         Assert.That(result.ExitCode, Is.Not.EqualTo(0));
         Assert.That(result.StandardError, Is.Not.Empty);
     }
+
+    private static Input DefaultInput() => new()
+    {
+        IsPreparationNeeded = true,
+        PreparationScriptPath = Path.Combine(TestDataDir, $"prepScript{PrepScriptExtension}"),
+        ExecutionMode = ExecutionMode.File,
+        ScriptPath = Path.Combine(TestDataDir, "script.py"),
+        Code = null,
+        Arguments = [],
+    };
+
+    private static Options DefaultOptions() => new() { ThrowErrorOnFailure = true, ErrorMessageOnFailure = null };
 }
