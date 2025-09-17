@@ -22,6 +22,12 @@ You can install the Task via frends UI Task View.
 
 ### Run tests
 
+#### Prerequisites
+- .NET SDK 8.0+
+- Python 3.8+ available on PATH
+- pip (bundled with Python)
+- On Windows: PowerShell 5+; on Linux/macOS: Bash
+
 Run the tests
 
 `dotnet test`

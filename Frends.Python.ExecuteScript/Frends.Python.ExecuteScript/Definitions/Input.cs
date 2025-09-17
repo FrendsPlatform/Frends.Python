@@ -17,6 +17,9 @@ public class Input
 
     /// <summary>
     /// Path to a script that should be run before a main script. Script can be .ps1 on Windows or .sh on Linux.
+    /// You can install here any dependencies that your main script needs (e.g. pip install -r requirements.txt; pip install numpy),
+    /// move to a specific directory to execute the main script from there (e.g. cd /home/user/scripts),
+    /// setup virtual environment (e.g. python -m venv venv; source venv/bin/activate) etc.
     /// </summary>
     /// <example>/path/to/script.sh</example>
     [UIHint(nameof(IsPreparationNeeded), "", true)]
@@ -53,6 +56,5 @@ public class Input
     /// Arguments provided to the script.
     /// </summary>
     /// <example>['MyName']</example>
-    [DefaultValue("")]
     public string[] Arguments { get; set; } = [];
 }

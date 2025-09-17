@@ -32,6 +32,7 @@ public static class Python
         var exitCode = 0;
         var stdError = string.Empty;
         var stdOutput = string.Empty;
+        using var process = new Process();
         try
         {
             var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -47,12 +48,14 @@ public static class Python
                 UseShellExecute = false,
                 CreateNoWindow = true,
             };
-            using var process = new Process();
             process.StartInfo = psi;
             process.Start();
 
-            stdOutput = await process.StandardOutput.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
-            stdError = await process.StandardError.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
+            var stdoutTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
+            var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
+            await Task.WhenAll(stdoutTask, stderrTask).ConfigureAwait(false);
+            stdOutput = await stdoutTask.ConfigureAwait(false);
+            stdError = await stderrTask.ConfigureAwait(false);
 
             await process.WaitForExitAsync(cancellationToken);
             exitCode = process.ExitCode;
@@ -80,6 +83,11 @@ public static class Python
                 exitCode,
                 stdError,
                 stdOutput);
+        }
+        finally
+        {
+            if (!process.HasExited)
+                process.Kill(true);
         }
     }
 
