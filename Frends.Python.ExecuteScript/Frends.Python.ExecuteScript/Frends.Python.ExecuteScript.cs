@@ -36,7 +36,7 @@ public static class Python
 
         try
         {
-            await ValidatePythonAvailability(process, cancellationToken);
+            await ValidatePythonAvailability(cancellationToken);
 
             var command = GenerateCommand(IsWindows(), input);
             var psi = new ProcessStartInfo
@@ -118,8 +118,9 @@ public static class Python
         return fullCommand;
     }
 
-    private static async Task ValidatePythonAvailability(Process process, CancellationToken cancellationToken)
+    private static async Task ValidatePythonAvailability(CancellationToken cancellationToken)
     {
+        using var process = new Process();
         var psi = new ProcessStartInfo
         {
             FileName = IsWindows() ? "cmd" : "/bin/bash",
@@ -130,11 +131,20 @@ public static class Python
             CreateNoWindow = true,
         };
         process.StartInfo = psi;
-        process.Start();
 
-        await process.WaitForExitAsync(cancellationToken);
+        try
+        {
+            process.Start();
+            await process.WaitForExitAsync(cancellationToken);
+        }
+        finally
+        {
+            if (!process.HasExited) process.Kill(true);
+        }
+
         var exitCode = process.ExitCode;
-        if (exitCode != 0) throw new Exception($"Python is not installed nor added to PATH. Exit code: {exitCode}.");
+        if (exitCode != 0)
+            throw new Exception($"Python is not installed nor added to PATH. Exit code: {exitCode}.");
     }
 
     private static string GetArgumentsPrefix() => IsWindows() ? "/C" : "-c";
