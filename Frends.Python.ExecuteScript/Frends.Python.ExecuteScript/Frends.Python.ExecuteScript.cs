@@ -33,16 +33,16 @@ public static class Python
         var stdError = string.Empty;
         var stdOutput = string.Empty;
         using var process = new Process();
+
         try
         {
-            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            await ValidatePythonAvailability(process, cancellationToken);
 
-            var command = GenerateCommand(isWindows, input);
-            var argumentsPrefix = isWindows ? "/C" : "-c";
+            var command = GenerateCommand(IsWindows(), input);
             var psi = new ProcessStartInfo
             {
-                FileName = isWindows ? "cmd" : "/bin/bash",
-                Arguments = $"{argumentsPrefix} {command}",
+                FileName = IsWindows() ? "cmd" : "/bin/bash",
+                Arguments = $"{GetArgumentsPrefix()} {command}",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -117,4 +117,27 @@ public static class Python
 
         return fullCommand;
     }
+
+    private static async Task ValidatePythonAvailability(Process process, CancellationToken cancellationToken)
+    {
+        var psi = new ProcessStartInfo
+        {
+            FileName = IsWindows() ? "cmd" : "/bin/bash",
+            Arguments = $"{GetArgumentsPrefix()} python --version",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        };
+        process.StartInfo = psi;
+        process.Start();
+
+        await process.WaitForExitAsync(cancellationToken);
+        var exitCode = process.ExitCode;
+        if (exitCode != 0) throw new Exception($"Python is not installed nor added to PATH. Exit code: {exitCode}.");
+    }
+
+    private static string GetArgumentsPrefix() => IsWindows() ? "/C" : "-c";
+
+    private static bool IsWindows() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 }
