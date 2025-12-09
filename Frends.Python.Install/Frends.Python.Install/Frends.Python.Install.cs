@@ -13,7 +13,7 @@ namespace Frends.Python.Install;
 public static class Python
 {
     /// <summary>
-    /// Pythones the input string the specified number of times.
+    /// Description of what the Task will do.
     /// [Documentation](https://tasks.frends.com/tasks/frends-tasks/Frends-Python-Install)
     /// </summary>
     /// <param name="input">Essential parameters.</param>

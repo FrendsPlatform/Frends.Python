@@ -17,11 +17,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="StyleCop.Analyzers" Version="*">
+        <PackageReference Include="FrendsTaskAnalyzers" Version="1.*">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="System.ComponentModel.Annotations" Version="*" />
+        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" IncludePrerelease="true">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
@@ -31,21 +34,10 @@
     </ItemGroup>
 
     <ItemGroup>
-		<AdditionalFiles Include="FrendsTaskMetadata.json" Pack="true" PackagePath="/">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </AdditionalFiles>
+        <Content Include="migration.json" PackagePath="/" Pack="true"/>
+        <Content Include="../CHANGELOG.md" PackagePath="/" Pack="true"/>
+        <AdditionalFiles Include="FrendsTaskMetadata.json" PackagePath="/" Pack="true"/>
     </ItemGroup>
 
-	<ItemGroup>
-		<Content Include="migration.json" PackagePath="/" Pack="true" />
-		<Content Include="../CHANGELOG.md" PackagePath="/" Pack="true" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="FrendsTaskAnalyzers" Version="*">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
 
 </Project>

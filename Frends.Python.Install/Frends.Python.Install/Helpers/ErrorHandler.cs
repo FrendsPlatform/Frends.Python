@@ -19,6 +19,6 @@ internal static class ErrorHandler
             ? $"{errorMessageOnFailure}: {exception.Message}"
             : exception.Message;
 
-        return new Result { Success = false, Error = error };
+        return new Result { Success = false, Error = new Error { Message = errorMessage, AdditionalInfo = exception } };
     }
 }
