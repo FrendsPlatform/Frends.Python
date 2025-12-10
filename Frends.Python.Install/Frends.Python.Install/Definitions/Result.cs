@@ -15,11 +15,11 @@ public class Result
     /// Input string repeated the specified number of times.
     /// </summary>
     /// <example>foobar,foobar</example>
-    public string Output { get; set; }
+    public string? Output { get; set; }
 
     /// <summary>
     /// Error that occurred during task execution.
     /// </summary>
     /// <example>object { string Message, Exception AdditionalInfo }</example>
-    public Error Error { get; set; }
+    public Error? Error { get; set; }
 }

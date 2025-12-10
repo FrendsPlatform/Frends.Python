@@ -36,7 +36,7 @@ public class ErrorHandlerTest
         var ex = Assert.Throws<Exception>(() =>
             Python.Install(DefaultInput(), DefaultConnection(), options, CancellationToken.None));
         Assert.That(ex, Is.Not.Null);
-        Assert.That(ex.Message, Contains.Substring(CustomErrorMessage));
+        Assert.That(ex!.Message, Contains.Substring(CustomErrorMessage));
     }
 
     private static Input DefaultInput() => new()
