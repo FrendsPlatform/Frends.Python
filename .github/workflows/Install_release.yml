@@ -1,4 +1,6 @@
 name: Install_release
+permissions:
+  contents: write
 
 on:
   workflow_dispatch:
