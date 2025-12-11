@@ -104,6 +104,7 @@ public static class Python
         };
 
         string fullCommand;
+
         if (input.IsPreparationNeeded)
         {
             fullCommand = isWindows
@@ -125,9 +126,7 @@ public static class Python
         {
             FileName = IsWindows() ? "cmd" : "/bin/bash",
             Arguments = $"{GetArgumentsPrefix()} python --version",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
+            UseShellExecute = true,
             CreateNoWindow = true,
         };
         process.StartInfo = psi;
@@ -143,8 +142,9 @@ public static class Python
         }
 
         var exitCode = process.ExitCode;
+
         if (exitCode != 0)
-            throw new Exception($"Python is not installed nor added to PATH. Exit code: {exitCode}.");
+            throw new Exception($"Python is not installed or not added to PATH. Exit code: {exitCode}.");
     }
 
     private static string GetArgumentsPrefix() => IsWindows() ? "/C" : "-c";
