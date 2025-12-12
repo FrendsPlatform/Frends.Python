@@ -33,16 +33,16 @@ public static class Python
         var stdError = string.Empty;
         var stdOutput = string.Empty;
         using var process = new Process();
+
         try
         {
-            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+            await ValidatePythonAvailability(cancellationToken);
 
-            var command = GenerateCommand(isWindows, input);
-            var argumentsPrefix = isWindows ? "/C" : "-c";
+            var command = GenerateCommand(IsWindows(), input);
             var psi = new ProcessStartInfo
             {
-                FileName = isWindows ? "cmd" : "/bin/bash",
-                Arguments = $"{argumentsPrefix} {command}",
+                FileName = IsWindows() ? "cmd" : "/bin/bash",
+                Arguments = $"{GetArgumentsPrefix()} {command}",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -104,6 +104,7 @@ public static class Python
         };
 
         string fullCommand;
+
         if (input.IsPreparationNeeded)
         {
             fullCommand = isWindows
@@ -117,4 +118,36 @@ public static class Python
 
         return fullCommand;
     }
+
+    private static async Task ValidatePythonAvailability(CancellationToken cancellationToken)
+    {
+        using var process = new Process();
+        var psi = new ProcessStartInfo
+        {
+            FileName = IsWindows() ? "cmd" : "/bin/bash",
+            Arguments = $"{GetArgumentsPrefix()} python --version",
+            UseShellExecute = true,
+            CreateNoWindow = true,
+        };
+        process.StartInfo = psi;
+
+        try
+        {
+            process.Start();
+            await process.WaitForExitAsync(cancellationToken);
+        }
+        finally
+        {
+            if (!process.HasExited) process.Kill(true);
+        }
+
+        var exitCode = process.ExitCode;
+
+        if (exitCode != 0)
+            throw new Exception($"Python is not installed or not added to PATH. Exit code: {exitCode}.");
+    }
+
+    private static string GetArgumentsPrefix() => IsWindows() ? "/C" : "-c";
+
+    private static bool IsWindows() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
 }
